@@ -2,8 +2,8 @@
 S3 Storage Implementation file
 """
 import os
-import boto3
 import logging
+import boto3
 from botocore.exceptions import ClientError
 
 logger = logging.getLogger()
@@ -17,8 +17,20 @@ class S3():
         logger.debug('Loading S3 Module')
         self.s3_client = boto3.client('s3')
 
-    # def 
+    def get_object(self, object_key, s3_bucket):
+        """
+        Gets object from s3
+        """
+        bucket = self.s3_client.get_object(Bucket=s3_bucket,
+                                           key=object_key)["Body"].read()
+        logger.debug('Bucket output data - %s', bucket)
+        return bucket
 
+    def download_file(self, bucket_name, object_name, file_name):
+        """
+        Download file from s3
+        """
+        self.s3_client.download_file(bucket_name, object_name, file_name)
 
     def upload_file(self, file_name, bucket, object_name=None):
         """
